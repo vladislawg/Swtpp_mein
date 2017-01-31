@@ -184,6 +184,32 @@ public class TryMoveTest {
 		assertMove("g3-f4", true, false);
 	}
 	
+	@Test
+	public void testWrongPlayerMoving() {
+		startGame(",b,,/,,w/,,,/,b,/,,,/,,/,,,", true);
+		assertMove("d4-c3", false, false);
+		assertGameState(",b,,/,,w/,,,/,b,/,,,/,,/,,,", true, false, false);
+	}
+	
+	@Test
+	public void testDoubleAttackWithDifferentStones() {
+		startGame(",b,,/,,w/,,,/,b,/,,,/b,,b/w,,w,", true);
+		assertMove("a1-c3", true, true);
+		assertGameState(",b,,/,,w/,,,/,b,/,wb,,/,,b/,,w,", true, false, false);
+		assertMove("e1-g3", true, false);
+	}
+	
+	@Test
+	public void testExampleFromTaskDescription() {
+		startGame("b,b,,/b,b,bb/,b,bw,b/,,wb/w,wb,w,w/ww,,w/,w,,w", false);
+		assertMove("c5-b4", false, true);
+		assertGameState("b,b,,/b,b,bb/,,bw,b/b,,wb/w,wb,w,w/ww,,w/,w,,w", true, false, false);
+		assertMove("a3-c5", true, true);
+		assertGameState("b,b,,/b,b,bb/,wb,bw,b/,,wb/,wb,w,w/ww,,w/,w,,w", true, false, false);
+		assertMove("c5-e7", true, true);
+		assertGameState("b,b,Wbb,/b,,bb/,,bw,b/,,wb/,wb,w,w/ww,,w/,w,,w", false, false, false);
+	}
+	
 //	Cannot test this yet because we are not allowed to check for exceptions
 //	@Test
 //	public void testInvalidGameState() {
