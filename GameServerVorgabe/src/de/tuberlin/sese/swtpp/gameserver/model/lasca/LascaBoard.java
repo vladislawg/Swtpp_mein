@@ -47,8 +47,9 @@ public class LascaBoard {
 		performValidMove(move, color);
 		boolean madeOfficer = makeOfficerIfNecessary(move, color);
 		
-		if (madeOfficer) return false;
-		return canAttackInDirection(move.getEnd(), color, move.getDirection());
+		if (!madeOfficer && move instanceof LascaAttackMove) 
+			return canAttackInDirection(move.getEnd(), color, move.getDirection());
+		return false;
 	}
 	
 	private boolean isValidMove(LascaMove move, Color color) {

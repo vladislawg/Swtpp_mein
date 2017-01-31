@@ -24,6 +24,8 @@ public class LascaGame extends Game implements Serializable{
 
 	// internal representation of the game state
 	private LascaBoard board;
+	private Player lastPlayer;
+	private LascaMove lastMove;
 	
 	/************************
 	 * constructors
@@ -199,10 +201,17 @@ public class LascaGame extends Game implements Serializable{
 	}
 	
 	@Override
-	public boolean tryMove(String moveString, Player player) {		
+	public boolean tryMove(String moveString, Player player) {	
+		if (player != nextPlayer) return false;
+		
 		LascaMove move;
 		try { move = LascaMove.fromString(moveString); } 
 		catch (IllegalArgumentException e) { return false; }
+		
+		if (player == lastPlayer) {
+			if (!lastMove.getEnd().equals(move.getStart()))
+				return false;
+		}
 		
 		LascaBoard.Color color;
 		try { color = getBoardColorFromPlayer(player); }
@@ -212,6 +221,9 @@ public class LascaGame extends Game implements Serializable{
 		try { canContinue = board.performMove(move, color); }
 		catch (IllegalArgumentException e) { return false; }
 		
+		lastPlayer = nextPlayer;
+		lastMove = move;
+		
 		if (!canContinue) {
 			toggleNextPlayer();
 		}
@@ -219,6 +231,7 @@ public class LascaGame extends Game implements Serializable{
 		if (board.hasWon(color)) {
 			this.finish(player);
 		}
+		
 		return true;
 	}
 
@@ -234,7 +247,5 @@ public class LascaGame extends Game implements Serializable{
 		else 
 			nextPlayer = blackPlayer;
 	}
-	
-	//this ist my 
 
 }
