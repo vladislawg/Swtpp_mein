@@ -23,7 +23,7 @@ public class LascaGame extends Game implements Serializable{
 	private Player whitePlayer;
 
 	// internal representation of the game state
-	// TODO: insert additional game data here
+	private LascaBoard board;
 	
 	/************************
 	 * constructors
@@ -33,6 +33,7 @@ public class LascaGame extends Game implements Serializable{
 		super();
 		
 		// initialize internal game model (state/ board here)
+		this.setState("b,b,b,b/b,b,b/b,b,b,b/,,/w,w,w,w/w,w,w/w,w,w,w");
 	}
 	
 	/*******************************************
@@ -189,22 +190,49 @@ public class LascaGame extends Game implements Serializable{
 	
 	@Override
 	public void setState(String state) {
-		// TODO: implement
+		this.board = LascaBoard.fromString(state);
 	}
 	
 	@Override
 	public String getState() {
-		// TODO: implement
-		return "";
+		return this.board.toString();
 	}
 	
 	@Override
-	public boolean tryMove(String moveString, Player player) {
-		// TODO: implement
-		// hint: see javadoc comment in super class
-		return false;
+	public boolean tryMove(String moveString, Player player) {		
+		LascaMove move;
+		try { move = LascaMove.fromString(moveString); } 
+		catch (IllegalArgumentException e) { return false; }
+		
+		LascaBoard.Color color;
+		try { color = getBoardColorFromPlayer(player); }
+		catch (IllegalArgumentException e) { return false; }
+		
+		boolean canContinue;
+		try { canContinue = board.performMove(move, color); }
+		catch (IllegalArgumentException e) { return false; }
+		
+		if (!canContinue) {
+			toggleNextPlayer();
+		}
+		
+		if (board.hasWon(color)) {
+			this.finish(player);
+		}
+		return true;
 	}
 
-
+	private LascaBoard.Color getBoardColorFromPlayer(Player player) {
+		if (player == blackPlayer) return LascaBoard.Color.BLACK;
+		if (player == whitePlayer) return LascaBoard.Color.WHITE;
+		throw new IllegalArgumentException("Invalid Player");
+	}
+	
+	private void toggleNextPlayer() {
+		if (nextPlayer == blackPlayer) 
+			nextPlayer = whitePlayer;
+		else 
+			nextPlayer = blackPlayer;
+	}
 
 }
