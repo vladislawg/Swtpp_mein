@@ -234,5 +234,7 @@ public class LascaGame extends Game implements Serializable{
 		else 
 			nextPlayer = blackPlayer;
 	}
+	
+	//this ist my 
 
 }
