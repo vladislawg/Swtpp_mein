@@ -10,6 +10,7 @@ import org.junit.Test;
 import de.tuberlin.sese.swtpp.gameserver.control.GameController;
 import de.tuberlin.sese.swtpp.gameserver.model.Player;
 import de.tuberlin.sese.swtpp.gameserver.model.User;
+import de.tuberlin.sese.swtpp.gameserver.model.lasca.LascaBoard;
 import de.tuberlin.sese.swtpp.gameserver.model.lasca.LascaGame;
 
 public class LascaGameTest {
@@ -22,6 +23,7 @@ public class LascaGameTest {
 	Player blackPlayer = null;
 	LascaGame game = null;
 	GameController controller;
+	LascaBoard board;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -173,4 +175,7 @@ public class LascaGameTest {
 		game.setError(false);
 		assertFalse(game.isError());
 	}
+	
+	
+	
 }

@@ -15,7 +15,7 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Vladislaw/Desktop/Swtpp/apache-tomcat-9.0.0.M17/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Vladislaw/Desktop/GitHub/Swtpp_mein/GameServerVorgabe/lib/javax.json-1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Vladislaw/Desktop/GitHub/Swtpp_mein/apache-tomcat-9.0.0.M17/lib/servlet-api.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
