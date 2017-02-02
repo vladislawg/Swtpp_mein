@@ -214,8 +214,10 @@ public class LascaGame extends Game implements Serializable{
 		}
 		
 		LascaBoard.Color color;
-		try { color = getBoardColorFromPlayer(player); }
-		catch (IllegalArgumentException e) { return false; }
+		color = getBoardColorFromPlayer(player);
+//		try { color = getBoardColorFromPlayer(player); }
+//		catch (IllegalArgumentException e) { return false; }
+//		
 		
 		boolean canContinue;
 		try { canContinue = board.performMove(move, color); }
