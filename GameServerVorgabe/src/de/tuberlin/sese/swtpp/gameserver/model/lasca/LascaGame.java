@@ -1,8 +1,10 @@
 package de.tuberlin.sese.swtpp.gameserver.model.lasca;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 
 import de.tuberlin.sese.swtpp.gameserver.model.Game;
+import de.tuberlin.sese.swtpp.gameserver.model.Move;
 import de.tuberlin.sese.swtpp.gameserver.model.Player;
 
 /**
@@ -24,8 +26,6 @@ public class LascaGame extends Game implements Serializable{
 
 	// internal representation of the game state
 	private LascaBoard board;
-	private Player lastPlayer;
-	private LascaMove lastMove;
 	
 	/************************
 	 * constructors
@@ -35,6 +35,7 @@ public class LascaGame extends Game implements Serializable{
 		super();
 		
 		// initialize internal game model (state/ board here)
+		history = new LinkedList<>(); 
 		this.setState("b,b,b,b/b,b,b/b,b,b,b/,,/w,w,w,w/w,w,w/w,w,w,w");
 	}
 	
@@ -203,44 +204,40 @@ public class LascaGame extends Game implements Serializable{
 	@Override
 	public boolean tryMove(String moveString, Player player) {	
 		if (player != nextPlayer) return false;
+		LascaBoard.Color color = getBoardColorFromPlayer(player);
 		
 		LascaMove move;
 		try { move = LascaMove.fromString(moveString); } 
 		catch (IllegalArgumentException e) { return false; }
-		
-		if (player == lastPlayer) {
-			if (!lastMove.getEnd().equals(move.getStart()))
-				return false;
-		}
-		
-		LascaBoard.Color color;
-		color = getBoardColorFromPlayer(player);
-//		try { color = getBoardColorFromPlayer(player); }
-//		catch (IllegalArgumentException e) { return false; }
-//		
+		if (isInvalidMoveHistoryContinuation(move, player)) return false;
 		
 		boolean canContinue;
 		try { canContinue = board.performMove(move, color); }
 		catch (IllegalArgumentException e) { return false; }
 		
-		lastPlayer = nextPlayer;
-		lastMove = move;
-		
-		if (!canContinue) {
-			toggleNextPlayer();
-		}
-		
-		if (board.hasWon(color)) {
-			this.finish(player);
-		}
+		addToHistory(move, player);
+		if (!canContinue) toggleNextPlayer();
+		if (board.hasWon(color)) this.finish(player);
 		
 		return true;
+	}
+	
+	private boolean isInvalidMoveHistoryContinuation(LascaMove currentMove, Player currentPlayer) {
+		if (history.size() == 0) return false;
+		
+		Move lastGameMove = history.get(history.size() - 1);
+		Player lastPlayer = lastGameMove.getPlayer();
+		LascaMove lastMove = LascaMove.fromString(lastGameMove.getMove());
+		
+		if (currentPlayer != lastPlayer) return false;
+		if (!currentMove.extendsMove(lastMove)) return true;
+		if (currentMove.isReverse(lastMove)) return true;
+		return false;		
 	}
 
 	private LascaBoard.Color getBoardColorFromPlayer(Player player) {
 		if (player == blackPlayer) return LascaBoard.Color.BLACK;
-		if (player == whitePlayer) return LascaBoard.Color.WHITE;
-		throw new IllegalArgumentException("Invalid Player");
+		return LascaBoard.Color.WHITE;
 	}
 	
 	private void toggleNextPlayer() {
@@ -249,5 +246,8 @@ public class LascaGame extends Game implements Serializable{
 		else 
 			nextPlayer = blackPlayer;
 	}
-
+	
+	private void addToHistory(LascaMove move, Player player) {
+		history.add(new Move(move.toString(), getState(), player));
+	}
 }

@@ -52,12 +52,6 @@ listMoves s = "[g3-f4,a3-c5]" -- Eigene Definition einfügen!
     --- ... ---
 
 --- input (TODO)
-
-parse :: String -> GameState
-parse s = parseInput (splitOn " " s)
-
-
-
 parseInput :: [String] -> GameState
 parseInput (boardString:colorString:[]) = GameState (parseColor colorString) (parseBoard boardString)
 --parseInput (board:color:[])   = ... (parseColor color) ...

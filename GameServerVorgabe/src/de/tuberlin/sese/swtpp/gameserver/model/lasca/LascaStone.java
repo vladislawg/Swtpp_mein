@@ -1,11 +1,13 @@
 package de.tuberlin.sese.swtpp.gameserver.model.lasca;
+import java.io.Serializable;
 
-public class LascaStone {
-	
+public class LascaStone  implements Serializable{
+
+	private static final long serialVersionUID = -6748501418136306909L;
 	private boolean isOfficer;
 	private LascaBoard.Color color;
 	
-	public LascaStone(LascaBoard.Color color, boolean isOfficer) {
+	public LascaStone(LascaBoard.Color color, boolean isOfficer){
 		this.color = color;
 		this.isOfficer = isOfficer;
 	}

@@ -1,9 +1,11 @@
 package de.tuberlin.sese.swtpp.gameserver.model.lasca;
 import java.util.LinkedList;
 import java.util.List;
+import java.io.Serializable;
 
-public class LascaPosition {
-	
+public class LascaPosition implements Serializable {
+
+	private static final long serialVersionUID = 2096465799367727317L;
 	private LinkedList<LascaStone> stones;
 	
 	public LascaPosition() {
@@ -25,7 +27,6 @@ public class LascaPosition {
 	
 	public LascaStone peekTopStone() {
 		return stones.getFirst();
-		
 	}
 	
 	public LascaStone popTopStone() {

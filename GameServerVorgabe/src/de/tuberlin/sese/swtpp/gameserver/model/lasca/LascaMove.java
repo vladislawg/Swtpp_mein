@@ -1,6 +1,9 @@
 package de.tuberlin.sese.swtpp.gameserver.model.lasca;
+import java.io.Serializable;
 
-public abstract class LascaMove {	
+public abstract class LascaMove implements Serializable{	
+
+	private static final long serialVersionUID = -5039800816348334532L;
 	private String start;
 	private String end;
 	
@@ -10,7 +13,7 @@ public abstract class LascaMove {
 	
 	public static LascaMove fromString(String string) {
 		String[] parts = string.split("-");
-		
+
 		if (parts.length != 2) {
 			throw new IllegalArgumentException("Invalid lasca move string");
 		}
@@ -46,11 +49,12 @@ public abstract class LascaMove {
 		return this.end;
 	}
 	
-	public LascaBoard.Direction getDirection() {
-		if (LascaBoardUtils.isIdAbove(start, end)) 
-			return LascaBoard.Direction.DOWN;
-		else
-			return LascaBoard.Direction.UP;
+	public boolean isReverse(LascaMove other) {
+		return start.equals(other.end) & end.equals(other.start);
+	}
+	
+	public boolean extendsMove(LascaMove other) {
+		return start.equals(other.end);
 	}
 	
 	public boolean equals(LascaMove other) {

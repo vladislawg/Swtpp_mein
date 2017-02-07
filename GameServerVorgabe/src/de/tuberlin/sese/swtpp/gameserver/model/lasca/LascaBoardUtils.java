@@ -3,9 +3,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.io.Serializable;
 
-public final class LascaBoardUtils {
-	
+public abstract class LascaBoardUtils implements Serializable{
+	private static final long serialVersionUID = 789455852701851311L;
+
 	public static final int ROWS = 7;
 	
 	private static ArrayList<List<String>> groupedIds;
@@ -129,11 +131,5 @@ public final class LascaBoardUtils {
 		if (color == LascaBoard.Color.BLACK) 
 			return id.endsWith("1");
 		return id.endsWith("7");
-	}
-	
-	public static boolean isIdAbove(String id1, String id2) {
-		int[] pos1 = positionFromId(id1);
-		int[] pos2 = positionFromId(id2);
-		return pos1[1] > pos2[1]; 
 	}
 }

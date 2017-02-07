@@ -3,8 +3,14 @@ package de.tuberlin.sese.swtpp.gameserver.model.lasca;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.io.Serializable;
 
-public class LascaBoard {
+public class LascaBoard implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6877891466483362925L;
+
 	public enum Color { BLACK, WHITE }
 	public enum Direction { UP, DOWN }
 	
@@ -48,7 +54,7 @@ public class LascaBoard {
 		boolean madeOfficer = makeOfficerIfNecessary(move, color);
 		
 		if (!madeOfficer && move instanceof LascaAttackMove) 
-			return canAttackInDirection(move.getEnd(), color, move.getDirection());
+			return canAttackExceptReverse(move.getEnd(), color, move);
 		return false;
 	}
 	
@@ -123,9 +129,9 @@ public class LascaBoard {
 		return targets;
 	}
 	
-	private boolean canAttackInDirection(String startId, Color color, Direction direction) {
+	private boolean canAttackExceptReverse(String startId, Color color, LascaMove lastMove) {
 		for (LascaMove move : getValidAttackMovesFromStart(startId, color)) {
-			if (move.getDirection() == direction) 
+			if (!move.isReverse(lastMove)) 
 				return true;
 		}
 		return false;
